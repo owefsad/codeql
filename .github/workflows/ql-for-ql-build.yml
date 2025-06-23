@@ -36,14 +36,14 @@ jobs:
           CODEQL: ${{ steps.find-codeql.outputs.codeql-path }}
       - name: Cache entire pack
         id: cache-pack
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/pack
           key: ${{ runner.os }}-pack-${{ hashFiles('ql/**/Cargo.lock') }}-${{ hashFiles('ql/**/*.rs') }}-${{ hashFiles('ql/**/*.ql*') }}-${{ hashFiles('ql/**/qlpack.yml') }}-${{ hashFiles('ql/ql/src/ql.dbscheme*') }}-${{ steps.get-codeql-version.outputs.version }}--${{ hashFiles('.github/workflows/ql-for-ql-build.yml') }}
       - name: Cache queries
         if: steps.cache-pack.outputs.cache-hit != 'true'
         id: cache-queries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/queries
           key: queries-${{ hashFiles('ql/**/*.ql*') }}-${{ hashFiles('ql/**/qlpack.yml') }}-${{ hashFiles('ql/ql/src/ql.dbscheme*') }}-${{ steps.get-codeql-version.outputs.version }}--${{ hashFiles('.github/workflows/ql-for-ql-build.yml') }}
@@ -66,7 +66,7 @@ jobs:
       - name: Cache entire extractor
         if: steps.cache-pack.outputs.cache-hit != 'true'
         id: cache-extractor
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ql/target/release/ql-autobuilder
@@ -76,7 +76,7 @@ jobs:
           key: ${{ runner.os }}-extractor-${{ hashFiles('ql/**/Cargo.lock') }}-${{ hashFiles('ql/**/*.rs') }}
       - name: Cache cargo
         if: steps.cache-extractor.outputs.cache-hit != 'true' && steps.cache-pack.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
